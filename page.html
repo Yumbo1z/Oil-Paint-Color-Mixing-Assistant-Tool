@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oil Paint Color Mixing Assistant</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .color-picker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .target-color {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            border: 3px solid #2c3e50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .color-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .color-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .color-input label {
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        .color-input input {
+            width: 60px;
+            height: 30px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .primary-colors {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .primary-color {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .primary-swatch {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #2c3e50;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .primary-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .mixing-steps {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-number {
+            background-color: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .mixing-ratio {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .ratio-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #7f8c8d;
+        }
+        
+        .ratio-text {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(90deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+        }
+        
+        .reset-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tips {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tips-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .tip {
+            font-size: 0.9rem;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .primary-colors {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .color-inputs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Oil Paint Color Mixing Assistant</h1>
+            <p class="subtitle">Mix perfect colors using yellow, blue, and red primaries</p>
+        </header>
+        
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">1. Select Your Target Color</h2>
+                <div class="color-picker-container">
+                    <div style="display:flex;gap:12px;align-items:center;">
+                        <label for="colorPicker" style="font-weight:600;color:#34495e;">Quick Color Picker</label>
+                        <input type="color" id="colorPicker" value="#7870c8">
+                        <label for="totalTbsp" style="font-weight:600;color:#34495e;margin-left:20px;">Total mixture (tbsp)</label>
+                        <input type="number" id="totalTbsp" min="0" step="0.25" value="3" style="width:80px;height:32px;border:2px solid #bdc3c7;border-radius:5px;padding:4px;">
+                    </div>
+                    <div class="target-color" id="targetColor"></div>
+                    <div class="color-inputs">
+                        <div class="color-input">
+                            <label for="redInput">Red</label>
+                            <input type="range" id="redInput" min="0" max="255" value="120">
+                        </div>
+                        <div class="color-input">
+                            <label for="greenInput">Green</label>
+                            <input type="range" id="greenInput" min="0" max="255" value="80">
+                        </div>
+                        <div class="color-input">
+                            <label for="blueInput">Blue</label>
+                            <input type="range" id="blueInput" min="0" max="255" value="200">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">2. Your Primary Colors</h2>
+                <div class="primary-colors">
+                    <div class="primary-color">
+                        <div class="primary-swatch" id="yellowSwatch"></div>
+                        <input type="color" id="yellowColorInput" value="#ffff00" title="Choose yellow primary">
+                        <div class="primary-name">Yellow</div>
+                    </div>
+                    <div class="primary-color">
+                        <div class="primary-swatch" id="blueSwatch"></div>
+                        <input type="color" id="blueColorInput" value="#0000ff" title="Choose blue primary">
+                        <div class="primary-name">Blue</div>
+                    </div>
+                    <div class="primary-color">
+                        <div class="primary-swatch" id="redSwatch"></div>
+                        <input type="color" id="redColorInput" value="#ff0000" title="Choose red primary">
+                        <div class="primary-name">Red</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">3. Mixing Instructions</h2>
+                <div class="mixing-steps" id="mixingSteps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p>Adjust the sliders to select your target color, then click "Calculate Mixing Ratios"</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="calculate-btn" id="calculateBtn">Calculate Mixing Ratios</button>
+                    <button class="reset-btn" id="resetBtn">Reset</button>
+                </div>
+            </div>
+            
+            <div class="tips">
+                <div class="tips-title">Oil Painting Tips:</div>
+                <div class="tip">• Always mix more paint than you think you'll need</div>
+                <div class="tip">• Start with the lightest color and gradually add darker ones</div>
+                <div class="tip">• Keep a record of successful mixing ratios for future reference</div>
+                <div class="tip">• Test your mixed color on a scrap canvas before applying to your artwork</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const targetColor = document.getElementById('targetColor');
+        const redInput = document.getElementById('redInput');
+        const greenInput = document.getElementById('greenInput');
+        const blueInput = document.getElementById('blueInput');
+    const yellowSwatch = document.getElementById('yellowSwatch');
+    const blueSwatch = document.getElementById('blueSwatch');
+    const redSwatch = document.getElementById('redSwatch');
+    const colorPicker = document.getElementById('colorPicker');
+    const yellowColorInput = document.getElementById('yellowColorInput');
+    const blueColorInput = document.getElementById('blueColorInput');
+    const redColorInput = document.getElementById('redColorInput');
+    const totalTbspInput = document.getElementById('totalTbsp');
+        const mixingSteps = document.getElementById('mixingSteps');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        // Define primary colors (in RGB)
+        const primaries = {
+            yellow: { r: 255, g: 255, b: 0 },
+            blue: { r: 0, g: 0, b: 255 },
+            red: { r: 255, g: 0, b: 0 }
+        };
+
+        // Helper: convert hex color (#rrggbb) to {r,g,b}
+        function hexToRgb(hex) {
+            const clean = hex.replace('#', '');
+            const bigint = parseInt(clean, 16);
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+            return { r, g, b };
+        }
+
+        // Helper: convert r,g,b (0-255) to hex string
+        function componentToHex(c) {
+            const hex = Number(c).toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+            return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
+        }
+        
+        // Initialize the app
+        function init() {
+            // Set primary color swatches
+            yellowSwatch.style.backgroundColor = `rgb(${primaries.yellow.r}, ${primaries.yellow.g}, ${primaries.yellow.b})`;
+            blueSwatch.style.backgroundColor = `rgb(${primaries.blue.r}, ${primaries.blue.g}, ${primaries.blue.b})`;
+            redSwatch.style.backgroundColor = `rgb(${primaries.red.r}, ${primaries.red.g}, ${primaries.red.b})`;
+            // Initialize color pickers values from primaries
+            yellowColorInput.value = rgbToHex(primaries.yellow.r, primaries.yellow.g, primaries.yellow.b);
+            blueColorInput.value = rgbToHex(primaries.blue.r, primaries.blue.g, primaries.blue.b);
+            redColorInput.value = rgbToHex(primaries.red.r, primaries.red.g, primaries.red.b);
+            // Set color picker from sliders
+            colorPicker.value = rgbToHex(redInput.value, greenInput.value, blueInput.value);
+            
+            // Update target color display
+            updateTargetColor();
+            
+            // Add event listeners
+            redInput.addEventListener('input', () => { updateTargetColor(); colorPicker.value = rgbToHex(redInput.value, greenInput.value, blueInput.value); });
+            greenInput.addEventListener('input', () => { updateTargetColor(); colorPicker.value = rgbToHex(redInput.value, greenInput.value, blueInput.value); });
+            blueInput.addEventListener('input', () => { updateTargetColor(); colorPicker.value = rgbToHex(redInput.value, greenInput.value, blueInput.value); });
+            // Color picker quick set
+            colorPicker.addEventListener('input', () => {
+                const { r, g, b } = hexToRgb(colorPicker.value);
+                redInput.value = r;
+                greenInput.value = g;
+                blueInput.value = b;
+                updateTargetColor();
+            });
+            // Primary color pickers
+            yellowColorInput.addEventListener('input', () => {
+                const { r, g, b } = hexToRgb(yellowColorInput.value);
+                primaries.yellow = { r, g, b };
+                yellowSwatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            });
+            blueColorInput.addEventListener('input', () => {
+                const { r, g, b } = hexToRgb(blueColorInput.value);
+                primaries.blue = { r, g, b };
+                blueSwatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            });
+            redColorInput.addEventListener('input', () => {
+                const { r, g, b } = hexToRgb(redColorInput.value);
+                primaries.red = { r, g, b };
+                redSwatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            });
+            // total tbsp change (no-op here, used when calculating)
+            totalTbspInput.addEventListener('input', () => {
+                // ensure value is not negative
+                if (totalTbspInput.value < 0) totalTbspInput.value = 0;
+            });
+            calculateBtn.addEventListener('click', calculateMixingRatios);
+            resetBtn.addEventListener('click', resetToDefault);
+        }
+        
+        // Update the target color display
+        function updateTargetColor() {
+            const r = redInput.value;
+            const g = greenInput.value;
+            const b = blueInput.value;
+            
+            targetColor.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        }
+        
+        // Calculate mixing ratios using a simplified algorithm
+        function calculateMixingRatios() {
+            const targetR = parseInt(redInput.value);
+            const targetG = parseInt(greenInput.value);
+            const targetB = parseInt(blueInput.value);
+            
+            // This is a simplified algorithm for demonstration
+            // In reality, color mixing with pigments is more complex
+            
+            // Calculate how much of each primary is needed
+            // We're using a basic proportional approach
+            const total = targetR + targetG + targetB;
+            
+            // Avoid division by zero
+            if (total === 0) {
+                displayMixingSteps(0, 0, 0);
+                return;
+            }
+            
+            // Calculate ratios (simplified approach)
+            const redRatio = targetR / total;
+            const greenRatio = targetG / total;
+            const blueRatio = targetB / total;
+            
+            // Adjust ratios based on primary colors
+            // This is a simplified approximation
+            const yellowPct = Math.round(greenRatio * 100);
+            const bluePct = Math.round(blueRatio * 100);
+            const redPct = Math.round(redRatio * 100);
+
+            // Read total tablespoons (fallback to 0 if invalid)
+            const totalTbsp = Math.max(0, parseFloat(totalTbspInput.value) || 0);
+
+            // Compute tbsp for each primary by percentage
+            const yellowTbsp = +(totalTbsp * (yellowPct / 100)).toFixed(2);
+            const blueTbsp = +(totalTbsp * (bluePct / 100)).toFixed(2);
+            const redTbsp = +(totalTbsp * (redPct / 100)).toFixed(2);
+
+            displayMixingSteps(yellowPct, bluePct, redPct, yellowTbsp, blueTbsp, redTbsp);
+        }
+        
+        // Display the mixing steps
+        function displayMixingSteps(yellow, blue, red, yellowTbsp = 0, blueTbsp = 0, redTbsp = 0) {
+            mixingSteps.innerHTML = '';
+            
+            // Step 1: Start with a base
+            const step1 = document.createElement('div');
+            step1.className = 'step';
+            step1.innerHTML = `
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p>Start with a white base to lighten your mixture if needed</p>
+                </div>
+            `;
+            mixingSteps.appendChild(step1);
+            
+            // Step 2: Add yellow
+            if (yellow > 0) {
+                const step2 = document.createElement('div');
+                step2.className = 'step';
+                step2.innerHTML = `
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <p>Add yellow paint</p>
+                        <div class="mixing-ratio">
+                            <div class="ratio-color" style="background-color: rgb(${primaries.yellow.r}, ${primaries.yellow.g}, ${primaries.yellow.b});"></div>
+                            <div class="ratio-text">${yellow}% of total mixture${yellowTbsp ? ` — ${yellowTbsp} tbsp` : ''}</div>
+                        </div>
+                    </div>
+                `;
+                mixingSteps.appendChild(step2);
+            }
+            
+            // Step 3: Add blue
+            if (blue > 0) {
+                const step3 = document.createElement('div');
+                step3.className = 'step';
+                step3.innerHTML = `
+                    <div class="step-number">${yellow > 0 ? '3' : '2'}</div>
+                    <div class="step-content">
+                        <p>Add blue paint</p>
+                        <div class="mixing-ratio">
+                            <div class="ratio-color" style="background-color: rgb(${primaries.blue.r}, ${primaries.blue.g}, ${primaries.blue.b});"></div>
+                            <div class="ratio-text">${blue}% of total mixture${blueTbsp ? ` — ${blueTbsp} tbsp` : ''}</div>
+                        </div>
+                    </div>
+                `;
+                mixingSteps.appendChild(step3);
+            }
+            
+            // Step 4: Add red
+            if (red > 0) {
+                const stepNumber = (yellow > 0 ? 1 : 0) + (blue > 0 ? 1 : 0) + 2;
+                const step4 = document.createElement('div');
+                step4.className = 'step';
+                step4.innerHTML = `
+                    <div class="step-number">${stepNumber}</div>
+                    <div class="step-content">
+                        <p>Add red paint</p>
+                        <div class="mixing-ratio">
+                            <div class="ratio-color" style="background-color: rgb(${primaries.red.r}, ${primaries.red.g}, ${primaries.red.b});"></div>
+                            <div class="ratio-text">${red}% of total mixture${redTbsp ? ` — ${redTbsp} tbsp` : ''}</div>
+                        </div>
+                    </div>
+                `;
+                mixingSteps.appendChild(step4);
+            }
+            
+            // Step 5: Mix and adjust
+            const finalStep = document.createElement('div');
+            finalStep.className = 'step';
+            const totalTbsp = parseFloat(totalTbspInput.value) || 0;
+            const totalSummary = totalTbsp ? `<div style="margin-top:8px;color:#7f8c8d;font-size:0.92rem;">Total: ${totalTbsp} tbsp — ${yellow > 0 ? yellow + '% ' : ''}${blue > 0 ? blue + '% ' : ''}${red > 0 ? red + '%' : ''}</div>` : '';
+            finalStep.innerHTML = `
+                <div class="step-number">${(yellow > 0 ? 1 : 0) + (blue > 0 ? 1 : 0) + (red > 0 ? 1 : 0) + 2}</div>
+                <div class="step-content">
+                    <p>Thoroughly mix all colors together. Compare to your target color and adjust if necessary.</p>
+                    <div class="mixing-ratio">
+                        <div class="ratio-color" style="background-color: rgb(${redInput.value}, ${greenInput.value}, ${blueInput.value});"></div>
+                        <div class="ratio-text">Target Color</div>
+                    </div>
+                    ${totalSummary}
+                </div>
+            `;
+            mixingSteps.appendChild(finalStep);
+        }
+        
+        // Reset to default values
+        function resetToDefault() {
+            redInput.value = 120;
+            greenInput.value = 80;
+            blueInput.value = 200;
+            updateTargetColor();
+            mixingSteps.innerHTML = `
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <p>Adjust the sliders to select your target color, then click "Calculate Mixing Ratios"</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
