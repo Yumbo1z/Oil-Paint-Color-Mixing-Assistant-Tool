@@ -2,7 +2,7 @@
 <h1><a href="https://gildnovel.com/home" target="_blank">Check out my manga site first vro</a><h1>
   <h1>About</h1>
   <p>Hello Vro! This is a very lazy thing I made its nothing crazy you can fork it on vsc and use the live preview plugin to test it out! I haven't tried it out yet so I'm not sure if its accurate.</p></p>
-  <p>Get the latest updates by joining the official <a href="https://discord.gg/sArjtJGEgU" target="_blank">Discord Server</a>.
+  <p>Get the latest updates by joining the official <a href="https://discord.gg/Eun9gPQu38" target="_blank">Discord Server</a>.
  </br>
   Follow Yuyu's <a href="https://x.com/yumbo1z" target="_blank">Twitter</a>.
   </p>
